@@ -18,6 +18,7 @@ import "./stylesheets/application.scss";
 
 // Src
 import "./images/index";
+import './sweet';
 
 Rails.start();
 Turbolinks.start();

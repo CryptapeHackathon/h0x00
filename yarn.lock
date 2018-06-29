@@ -6217,6 +6217,10 @@ swarm-js@0.1.37:
     tar.gz "^1.0.5"
     xhr-request-promise "^0.1.2"
 
+sweetalert2@^7.24.3:
+  version "7.24.3"
+  resolved "https://registry.yarnpkg.com/sweetalert2/-/sweetalert2-7.24.3.tgz#1a474c238c3ee812525c1e10b1027deee319577f"
+
 tapable@^0.2.7:
   version "0.2.8"
   resolved "https://registry.yarnpkg.com/tapable/-/tapable-0.2.8.tgz#99372a5c999bf2df160afc0d74bed4f47948cd22"
