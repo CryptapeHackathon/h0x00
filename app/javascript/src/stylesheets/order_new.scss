@@ -129,6 +129,12 @@
   }
 }
 
+.icon-back {
+  &::before {
+    font-size: 4rem;
+  }
+}
+
 input:focus {
   outline: none !important;
   box-shadow:none !important;
