@@ -25,8 +25,8 @@
   }
 
   .border {
-    margin-top: 1rem;
-    margin-bottom: 1rem;
+    margin-top: 0.28125rem;
+    margin-bottom: 0.28125rem;
     height: 0.5px;
     border: solid 0.5px #979797;
   }
@@ -52,6 +52,12 @@
       flex-direction: column;
       justify-content: center;
       align-items: center;
+    }
+
+    .v-line {
+      width: 0.5px;
+      height: 3.08125rem;
+      border: solid 0.5px #979797;
     }
   }
 
