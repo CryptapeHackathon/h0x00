@@ -1,0 +1,14 @@
+.chain-header {
+  width: 100%;
+  height: 4rem;
+  background-color: rgb(78,78,78);
+  color: white;
+
+  display: flex;
+  justify-content: flex-start;
+  align-items: flex-end;
+  span {
+    display: block;
+    justify-self: center;
+  }
+}

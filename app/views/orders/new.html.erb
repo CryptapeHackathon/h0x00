@@ -1,0 +1,62 @@
+<div class="chain-header">
+  <%= link_to 'Back', :back %>
+  <span>下单</span>
+</div>
+
+<div class="new-order">
+  <div class="order-card">
+    <div class="inner-card">
+
+      <h6>买入</h6>
+      <div class="border"></div>
+
+      <div class="items">
+        <div>A链</div>
+        <div>Acoin</div>
+        <div>100</div>
+      </div>
+
+      <div class="border"></div>
+
+      <h6>收货地址:</h6>
+
+      <form>
+        <div class="form-group">
+          <input type="text" class="form-control" placeholder="">
+        </div>
+      </form>
+    </div>
+
+  </div>
+
+  <div class="order-card">
+    <div class="inner-card">
+      <h6>付款</h6>
+      <div class="border"></div>
+
+      <div class="items">
+        <div>B链</div>
+        <div>Bcoin</div>
+        <div class="last-item">
+          <span>200</span><br/>
+          <small>(单价: 2.0)</small>
+        </div>
+      </div>
+
+      <div class="border"></div>
+
+      <h6>付款地址:</h6>
+
+      <form>
+        <div class="form-group">
+          <input type="text" class="form-control" placeholder="">
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <div class="button-group">
+    <button class="btn cancel-button">取消订单</button>
+    <button class="btn submit-button">提交订单</button>
+  </div>
+</div>
