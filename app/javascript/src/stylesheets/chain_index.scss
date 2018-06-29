@@ -15,6 +15,14 @@
   display: flex;
   justify-content: flex-start;
   align-items: flex-end;
+
+  //padding-left: 0.9375rem;
+  padding-bottom: 0.6375rem;
+
+  a {
+    margin-left: 0.9375rem;
+  }
+
   span {
     display: block;
     //justify-self: center;
