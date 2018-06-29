@@ -37,7 +37,7 @@
       </a>
 
       <a href="#">
-        <i class="icon-sell"></i>
+        <i class="icon-ex"></i>
         <span>Ex</span>
       </a>
     </footer>
