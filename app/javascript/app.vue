@@ -24,6 +24,23 @@
         </a>
       </div>
     </div>
+
+    <footer>
+      <a href="#" class="active">
+        <i class="icon-list"></i>
+        <span>列表</span>
+      </a>
+
+      <a href="#">
+        <i class="icon-sell"></i>
+        <span>出售</span>
+      </a>
+
+      <a href="#">
+        <i class="icon-sell"></i>
+        <span>Ex</span>
+      </a>
+    </footer>
   </div>
 </template>
 
@@ -32,6 +49,14 @@ export default {
   data: function() {
     return {
       orders: [
+        {
+          takerTokenName: "AAPO",
+          takerChainName: "Apollo",
+          makerTokenName: "BBAR",
+          makerChainName: "Barney",
+          takerAmount: 150,
+          makerAmount: 200
+        },
         {
           takerTokenName: "AAPO",
           takerChainName: "Apollo",
