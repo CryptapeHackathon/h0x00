@@ -33,6 +33,7 @@
 
 .chain-items {
   width: 100vw;
-  height: 100vh;
+  //height: 100vh;
   background-color: #efeff4;
+  min-height: calc(100vh - 7.5625rem);
 }
