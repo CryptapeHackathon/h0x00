@@ -3,20 +3,18 @@ default: &default
     - name: Apollo
       rpc: http://127.0.0.1:1337
       chain_id: 1
-      ex_contract:
-        address: x
-        private_key: x
+      ex_contract: x
       token_contracts:
         - name: Aurora
+          icon: aurora
           address: x
     - name: Barney
       rpc: http://127.0.0.1:1338
       chain_id: 1
-      ex_contract:
-        address: x
-        private_key: x
+      ex_contract: x
       token_contracts:
         - name: Bigfish
+          icon: bigfish
           address: x
 
 development:

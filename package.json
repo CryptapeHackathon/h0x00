@@ -2,13 +2,18 @@
   "name": "h0x00",
   "private": true,
   "dependencies": {
+    "@nervos/web3": "0.17.12",
     "@rails/webpacker": "3.5",
     "bootstrap": "^4.1.1",
     "jquery": "^3.3.1",
     "popper.js": "^1.14.3",
     "rails-ujs": "^5.2.0",
     "resolve-url-loader": "^2.3.0",
-    "turbolinks": "^5.1.1"
+    "sweetalert2": "^7.24.3",
+    "turbolinks": "^5.1.1",
+    "vue": "^2.5.16",
+    "vue-loader": "14.2.2",
+    "vue-template-compiler": "^2.5.16"
   },
   "devDependencies": {
     "webpack-dev-server": "2.11.2"
