@@ -15,7 +15,7 @@ footer {
   padding-left: 2.32rem;
   padding-right: 2.32rem;
 
-  > div {
+  > a {
     display: flex;
     flex-direction: column;
     justify-content: center;
@@ -37,5 +37,17 @@ footer {
       color: #8a8a8a;
     }
 
+  }
+
+  .active {
+    i {
+      &:before {
+        color: #36cc92;
+      }
+    }
+
+    span {
+      color: #36cc92;
+    }
   }
 }
