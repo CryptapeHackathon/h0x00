@@ -13,7 +13,7 @@ set :application_name, 'foobar'
 set :domain, '47.75.42.29'
 set :deploy_to, '/opt/deploy'
 set :repository, 'https://github.com/hackathon0x00/h0x00.git'
-set :branch, 'ian/deploy'
+set :branch, 'master'
 
 # Optional settings:
 set :user, 'deploy'
