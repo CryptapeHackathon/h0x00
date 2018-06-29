@@ -1,18 +1,106 @@
 .item-page {
   display: flex;
   flex-direction: row;
-  margin-top: 2rem;
-  margin-left: 1rem;
+  justify-content: space-between;
+  align-items: center;
+  margin-top: 1.125rem;
+  box-sizing: border-box;
+  //width: 100%;
+  width: 100vw;
+  //margin-right: -1rem;
+  margin-left: calc(-50vw + 50%);
+
+  height: 4.375rem;
+  border-radius: 2px;
+  box-shadow: 0 2px 2px 0 rgba(0, 0, 0, 0.24), 0 0 2px 0 rgba(0, 0, 0, 0.12);
+  border: solid 1px transparent;
+  background-image: linear-gradient(#ffffff, #ffffff), linear-gradient(to bottom, rgba(255, 255, 255, 0.2), rgba(255, 255, 255, 0.1) 5%, rgba(255, 255, 255, 0) 20%, rgba(255, 255, 255, 0));
+  background-origin: border-box;
+  background-clip: content-box, border-box;
 
   img {
+    margin-left: 1rem;
+    height: 2.35rem;
+    width: 2.35rem;
     border-radius: 50%;
     //margin-left: 2rem;
   }
 
+  .second {
+    //margin-left: 2.56rem;
+    div {
+      font-family: SourceHanSansCN sans-serif;
+      font-weight: normal;
+      font-style: normal;
+      font-stretch: normal;
+      line-height: 1.5;
+      letter-spacing: normal;
+      color: rgba(0, 0, 0, 0.87);
+    }
+
+    small {
+      font-family: SourceHanSansCN sans-serif;
+      font-size: 0.75rem;
+      font-weight: normal;
+      font-style: normal;
+      font-stretch: normal;
+      line-height: 2;
+      letter-spacing: normal;
+      color: rgba(136, 136, 136, 0.87);
+    }
+  }
+
+  .third {
+    //margin-left: 2.3125rem;
+    div {
+      font-family: SourceHanSansCN sans-serif;
+      font-size: 0.875rem;
+      font-weight: normal;
+      font-style: normal;
+      font-stretch: normal;
+      line-height: 1.43;
+      letter-spacing: normal;
+      color: rgba(0, 0, 0, 0.54);
+    }
+
+    small {
+      font-family: SourceHanSansCN sans-serif;
+      font-size: 0.75rem;
+      font-weight: normal;
+      font-style: normal;
+      font-stretch: normal;
+      line-height: 2;
+      letter-spacing: normal;
+      color: rgba(136, 136, 136, 0.87);
+    }
+  }
+
   .submit-order {
-    margin-left: 1rem;
-    background-color: rgb(54,204,146);
-    width: 50px;
-    height: 50px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    border-radius: 2px;
+    background-color: #36cc92;
+    box-shadow: 0 2px 2px 0 rgba(0, 0, 0, 0.24), 0 0 2px 0 rgba(0, 0, 0, 0.12);
+    height: 100%;
+    width: 4.5rem;
+    margin-right: 0;
+    box-sizing: border-box;
+    span {
+      font-family: SourceHanSansCN sans-serif;
+      font-size: 14px;
+      font-weight: normal;
+      font-style: normal;
+      font-stretch: normal;
+      line-height: normal;
+      letter-spacing: 0.5px;
+      color: #ffffff;
+    }
+
+    i.icon-shopping-cart {
+      font-size: 1.625rem;
+      margin-bottom: 0.3625rem;
+    }
   }
 }

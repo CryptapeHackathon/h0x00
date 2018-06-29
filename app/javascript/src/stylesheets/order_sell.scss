@@ -1,0 +1,35 @@
+.sell-order {
+  min-height: calc(100vh - 7.5625rem);
+  padding-bottom: 2rem;
+  form {
+    select {
+      border: none;
+      border-radius: 0;
+    }
+
+    input.amount {
+      border: none;
+      width: 4rem;
+    }
+  }
+
+  .items {
+    > div {
+      display: flex;
+      align-items: center;
+    }
+  }
+
+  select {
+    color: rgba(0, 0, 0, 0.87);
+  }
+
+  i.icon-triangle {
+    font-size: 0.375rem;
+    &:before {
+      color: #4e4e4e;
+    }
+  }
+
+
+}

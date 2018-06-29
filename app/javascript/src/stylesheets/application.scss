@@ -4,3 +4,22 @@
 @import "chain_index";
 @import "chain_item";
 @import "order_new";
+@import "order_sell";
+@import "footer";
+@import "admin_index";
+
+// icomoon
+@import "../icomoon/style";
+
+body {
+  background-color: #efeff4;
+}
+
+a {
+  text-decoration: none;
+  &:link,
+  &:visited,
+  &:hover {
+    text-decoration: none;
+  }
+}

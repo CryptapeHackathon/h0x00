@@ -1,0 +1,18 @@
+<footer>
+
+  <a href="<%= chains_path %>" class="<%= 'active' if list? %>">
+    <i class="icon-list"></i>
+    <span>列表</span>
+  </a>
+
+  <a href="<%= orders_sell_path %>" class="<%= 'active' if sell? %>">
+    <i class="icon-sell"></i>
+    <span>出售</span>
+  </a>
+
+  <a href="<%= admins_path %>" class="<%= 'active' if admin? %>">
+    <i class="icon-sell"></i>
+    <span>Ex</span>
+  </a>
+
+</footer>
