@@ -1,0 +1,29 @@
+default: &default
+  chains:
+    - name: Apollo
+      rpc: http://127.0.0.1:1337
+      chain_id: 1
+      ex_contract:
+        address: x
+        private_key: x
+      token_contracts:
+        - name: Aurora
+          address: x
+    - name: Barney
+      rpc: http://127.0.0.1:1338
+      chain_id: 1
+      ex_contract:
+        address: x
+        private_key: x
+      token_contracts:
+        - name: Bigfish
+          address: x
+
+development:
+  <<: *default
+
+test:
+  <<: *default
+
+production:
+  <<: *default
