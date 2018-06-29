@@ -6,4 +6,8 @@ module ApplicationHelper
   def sell?
     params[:controller] == "orders" && params[:action] == "sell"
   end
+
+  def admin?
+    params[:controller] == 'admins' && params[:action] == 'index'
+  end
 end
