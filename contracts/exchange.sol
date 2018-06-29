@@ -30,6 +30,28 @@ contract Owned {
 }
 
 // ----------------------------------------------------------------------------
+// Safe maths
+// ----------------------------------------------------------------------------
+library SafeMath {
+    function add(uint a, uint b) internal pure returns (uint c) {
+        c = a + b;
+        require(c >= a);
+    }
+    function sub(uint a, uint b) internal pure returns (uint c) {
+        require(b <= a);
+        c = a - b;
+    }
+    function mul(uint a, uint b) internal pure returns (uint c) {
+        c = a * b;
+        require(a == 0 || c / a == b);
+    }
+    function div(uint a, uint b) internal pure returns (uint c) {
+        require(b > 0);
+        c = a / b;
+    }
+}
+
+// ----------------------------------------------------------------------------
 // ERC Token Standard #20 Interface
 // https://github.com/ethereum/EIPs/blob/master/EIPS/eip-20.md
 // ----------------------------------------------------------------------------
@@ -46,6 +68,8 @@ contract ERC20Interface {
 }
 
 contract Exchanger is Owned {
+    using SafeMath for uint;
+
     mapping (bytes32 => uint) public filled;
     mapping (bytes32 => uint) public cancelled;
     mapping (bytes32 => Order) public orders;
@@ -88,7 +112,6 @@ contract Exchanger is Owned {
             takerAmount: takerAmount,
             orderHash: getOrderHash(msg.sender, makerToken, takerChain, takerToken, makerAmount, takerAmount)
         });
-        require(order.maker == msg.sender);
 
         if (ERC20Interface(order.maker).approve(owner, order.makerAmount)) {
             orders[order.orderHash] = order;
@@ -99,13 +122,82 @@ contract Exchanger is Owned {
         }
     }
 
-    // function cancelOrder(address[3] orderAddresses, uint[2] orderValues, string takerChain) public returns (uint) {
+    function cancelOrder(
+        address makerToken, 
+        string takerChain, 
+        address takerToken, 
+        uint makerAmount,
+        uint takerAmount,
+        uint cancelTakerAmount) public returns (uint) {
+        Order memory order = Order({
+            maker: msg.sender,
+            makerToken: makerToken,
+            takerChain: takerChain,
+            takerToken: takerToken,
+            makerAmount: makerAmount,
+            takerAmount: takerAmount,
+            orderHash: getOrderHash(msg.sender, makerToken, takerChain, takerToken, makerAmount, takerAmount)
+        });
 
-    // }
+        uint remainingAmount = order.takerAmount.sub(filled[order.orderHash].add(cancelled[order.orderHash]));
+        if (remainingAmount > 0) {
+            uint cancelledAmount = cancelTakerAmount > remainingAmount ? remainingAmount : cancelTakerAmount;
+            cancelled[order.orderHash] = cancelled[order.orderHash].add(cancelledAmount);
+            // revoke approval
+            ERC20Interface(order.maker).approve(owner, 0);
+            return 0;
+        } else {
+            emit LogError(uint8(Errors.ORDER_FULLY_FILLED_OR_CANCELLED), order.orderHash);
+            return 1;
+        }
+    }
 
-    // function fillOrder() {
+    function fillOrder(
+        address maker,
+        address makerToken, 
+        string takerChain, 
+        address takerToken, 
+        uint makerAmount,
+        uint takerAmount,
+        address taker,
+        uint fillAmount) public returns (uint) {
+        Order memory order = Order({
+            maker: maker,
+            makerToken: makerToken,
+            takerChain: takerChain,
+            takerToken: takerToken,
+            makerAmount: makerAmount,
+            takerAmount: takerAmount,
+            orderHash: getOrderHash(maker, makerToken, takerChain, takerToken, makerAmount, takerAmount)
+        });
 
-    // }
+        uint remainingAmount = order.takerAmount.sub(filled[order.orderHash].add(cancelled[order.orderHash]));
+        if (remainingAmount >= fillAmount) {
+            filled[order.orderHash] = filled[order.orderHash].add(fillAmount);
+            if (ERC20Interface(order.maker).transferFrom(maker, taker, fillAmount)) {
+                return 0;
+            } else {
+                emit LogError(uint8(Errors.INSUFFICIENT_BALANCE_OR_ALLOWANCE), order.orderHash);
+                return 1;
+            }
+        } else {
+            emit LogError(uint8(Errors.ORDER_FULLY_FILLED_OR_CANCELLED), order.orderHash);
+            return 1;
+        }
+    }
+
+    function getOrderFilled(bytes32 orderHash) public view returns (uint) {
+        return filled[orderHash];
+    }
+
+    function getOrderCancelled(bytes32 orderHash) public view returns (uint) {
+        return cancelled[orderHash];
+    }
+
+    function getOrder(bytes32 orderHash) public view returns(address, address, string, address, uint, uint) {
+        Order memory order = orders[orderHash];
+        return (order.maker, order.makerToken, order.takerChain, order.takerToken, order.makerAmount, order.takerAmount);
+    }
 
     function getOrderHash(
         address maker,
