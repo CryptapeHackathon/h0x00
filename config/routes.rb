@@ -4,4 +4,5 @@ Rails.application.routes.draw do
   root to: "chains#index"
   resources :chains, only: [:index]
   resources :orders, only: [:new]
+  get 'orders/sell', to: "orders#sell"
 end

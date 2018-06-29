@@ -141,7 +141,7 @@
   }
 }
 
-input:focus {
+input:focus, select:focus {
   outline: none !important;
   box-shadow:none !important;
   border-bottom: solid 0.5px #979797;
