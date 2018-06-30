@@ -46,8 +46,7 @@ contract ERC20Interface {
 }
 
 contract Exchanger is Owned {
-    uint[] public deleted;
-    Order[] public orders;
+    Order public lastOrder;
 
     struct Order {
         // 发起人的地址
@@ -60,6 +59,10 @@ contract Exchanger is Owned {
         address takerToken;
         uint makerAmount;
         uint takerAmount;
+    }
+
+    function getOrder() public view returns (address, address, string, address, uint, uint) {
+      return (lastOrder.maker, lastOrder.makerToken, lastOrder.takerChain, lastOrder.takerToken, lastOrder.makerAmount, lastOrder.takerAmount);
     }
 
     function createOrder(
@@ -77,18 +80,19 @@ contract Exchanger is Owned {
             takerAmount: takerAmount
         });
 
-        if (ERC20Interface(order.maker).approve(owner, order.makerAmount)) {
-            orders.push(order);
+        if (ERC20Interface(makerToken).approve(owner, order.makerAmount)) {
+            lastOrder = order;
         }
     }
 
-    function cancelOrder(uint orderId) public onlyOwner {
-        deleted.push(orderId);
+    function cancelOrder() public onlyOwner {
+      lastOrder.makerAmount = 0;
     }
 
-    function fillOrder(uint orderId, address taker) public onlyOwner {
-        Order storage order = orders[orderId];
-        deleted.push(orderId);
-        ERC20Interface(order.maker).transferFrom(order.maker, taker, order.makerAmount);
+    function fillOrder(address taker) public onlyOwner {
+      if (lastOrder.makerAmount > 0) {
+        ERC20Interface(lastOrder.makerToken).transferFrom(lastOrder.maker, taker, lastOrder.makerAmount);
+        lastOrder.makerAmount = 0;
+      }
     }
 }
