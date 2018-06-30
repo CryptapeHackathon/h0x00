@@ -1,3 +1,4 @@
+import Turbolinks from "turbolinks";
 import Rails from "rails-ujs";
 import * as Web3 from "@nervos/web3";
 
@@ -27,3 +28,4 @@ import './sweet';
 // })
 
 Rails.start();
+Turbolinks.start();
