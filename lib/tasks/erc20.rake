@@ -25,6 +25,33 @@ namespace :erc20 do
     puts "Bob ABAR #{bob_abar_balance}"
   end
 
+  task :allowance => :environment do
+    c = Rails.configuration.chains
+    cita_cli = c['cita_cli_path']
+    alice_addr = c['users']['alice']['address'][2..-1]
+    bob_addr = c['users']['bob']['address'][2..-1]
+    deploy_addr = c['users']['deploy']['address'][2..-1]
+
+    apollo = c['chains']['Apollo']
+    barney = c['chains']['Barney']
+    appo = apollo['token_contracts']['AAPO']['address'][2..-1]
+    abar = barney['token_contracts']['ABAR']['address'][2..-1]
+
+    alice_allowance = `#{cita_cli} ethabi encode function ./contracts/tokens_sol_ERC20Interface.abi allowance --param #{alice_addr} --param #{deploy_addr}`.gsub('"', '').strip
+    alice_aapo_allowance = JSON.parse(`#{cita_cli} rpc call --to 0x#{appo} --data 0x#{alice_allowance} --url #{apollo['rpc']}`)['result'].to_i(16)
+    alice_abar_allowance = JSON.parse(`#{cita_cli} rpc call --to 0x#{abar} --data 0x#{alice_allowance} --url #{barney['rpc']}`)['result'].to_i(16)
+
+    puts "Alice AAPO #{alice_aapo_allowance}"
+    puts "Alice ABAR #{alice_abar_allowance}"
+
+    bob_allowance = `#{cita_cli} ethabi encode function ./contracts/tokens_sol_ERC20Interface.abi allowance --param #{bob_addr} --param #{deploy_addr}`.gsub('"', '').strip
+    bob_aapo_allowance = JSON.parse(`#{cita_cli} rpc call --to 0x#{appo} --data 0x#{bob_allowance} --url #{apollo['rpc']}`)['result'].to_i(16)
+    bob_abar_allowance = JSON.parse(`#{cita_cli} rpc call --to 0x#{abar} --data 0x#{bob_allowance} --url #{barney['rpc']}`)['result'].to_i(16)
+
+    puts "Bob AAPO #{bob_aapo_allowance}"
+    puts "Bob ABAR #{bob_abar_allowance}"
+  end
+
   task :charge => :environment do
     c = Rails.configuration.chains
     cita_cli = c['cita_cli_path']
