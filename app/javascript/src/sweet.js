@@ -1,6 +1,6 @@
 import Swal from 'sweetalert2';
 
-$(document).on('turbolinks:load', () => {
+$(document).ready(()=> {
   let submitOrderButton = $("#submit-order-button");
 
   submitOrderButton.click(() => {
