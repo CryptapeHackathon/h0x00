@@ -177,7 +177,7 @@ contract Exchanger is Owned {
         uint remainingAmount = order.takerAmount.sub(filled[order.orderHash].add(cancelled[order.orderHash]));
         if (remainingAmount >= fillAmount) {
             filled[order.orderHash] = filled[order.orderHash].add(fillAmount);
-            if (ERC20Interface(order.maker).transferFrom(maker, taker, fillAmount)) {
+            if (ERC20Interface(makerToken).transferFrom(maker, taker, fillAmount)) {
                 return 0;
             } else {
                 emit LogError(uint8(Errors.INSUFFICIENT_BALANCE_OR_ALLOWANCE), order.orderHash);
@@ -233,13 +233,15 @@ contract Exchanger is Owned {
         returns (bytes32)
     {
         return keccak256(
-            address(this),
-            maker,
-            makerToken,
-            takerChain,
-            takerToken,
-            makerAmount,
-            takerAmount
+            abi.encodePacked(
+                address(this),
+                maker,
+                makerToken,
+                takerChain,
+                takerToken,
+                makerAmount,
+                takerAmount
+            )
         );
     }
 }
