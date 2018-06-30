@@ -9,7 +9,7 @@ contract Owned {
 
     event OwnershipTransferred(address indexed _from, address indexed _to);
 
-    constructor() public {
+    function Owned() public {
         owner = msg.sender;
     }
 
@@ -23,7 +23,7 @@ contract Owned {
     }
     function acceptOwnership() public {
         require(msg.sender == newOwner);
-        emit OwnershipTransferred(owner, newOwner);
+        OwnershipTransferred(owner, newOwner);
         owner = newOwner;
         newOwner = address(0);
     }
@@ -120,7 +120,7 @@ contract Exchanger is Owned {
             orders[order.orderHash] = order;
             return 0;
         } else {
-            emit LogError(uint8(Errors.INSUFFICIENT_BALANCE_OR_ALLOWANCE), order.orderHash);
+            LogError(uint8(Errors.INSUFFICIENT_BALANCE_OR_ALLOWANCE), order.orderHash);
             return 1;
         }
     }
@@ -150,7 +150,7 @@ contract Exchanger is Owned {
             ERC20Interface(makerToken).approve(owner, 0);
             return 0;
         } else {
-            emit LogError(uint8(Errors.ORDER_FULLY_FILLED_OR_CANCELLED), order.orderHash);
+            LogError(uint8(Errors.ORDER_FULLY_FILLED_OR_CANCELLED), order.orderHash);
             return 1;
         }
     }
@@ -177,14 +177,14 @@ contract Exchanger is Owned {
         uint remainingAmount = order.takerAmount.sub(filled[order.orderHash].add(cancelled[order.orderHash]));
         if (remainingAmount >= fillAmount) {
             filled[order.orderHash] = filled[order.orderHash].add(fillAmount);
-            if (ERC20Interface(order.maker).transferFrom(maker, taker, fillAmount)) {
+            if (ERC20Interface(makerToken).transferFrom(maker, taker, fillAmount)) {
                 return 0;
             } else {
-                emit LogError(uint8(Errors.INSUFFICIENT_BALANCE_OR_ALLOWANCE), order.orderHash);
+                LogError(uint8(Errors.INSUFFICIENT_BALANCE_OR_ALLOWANCE), order.orderHash);
                 return 1;
             }
         } else {
-            emit LogError(uint8(Errors.ORDER_FULLY_FILLED_OR_CANCELLED), order.orderHash);
+            LogError(uint8(Errors.ORDER_FULLY_FILLED_OR_CANCELLED), order.orderHash);
             return 1;
         }
     }
