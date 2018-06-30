@@ -1,31 +1,33 @@
 default: &default
   chains:
     Apollo:
-      rpc: http://127.0.0.1:1337
+      rpc: 'http://127.0.0.1:1337'
       chain_id: 1
-      ex_contract: x
+      ex_contract: 'x'
       token_contracts:
         AAPO:
           icon: aapo
-          address: x
+          address: 'x'
     Barney:
-      rpc: http://127.0.0.1:1338
+      rpc: 'http://127.0.0.1:1338'
       chain_id: 1
-      ex_contract: x
+      ex_contract: 'x'
       token_contracts:
         ABAR:
           icon: abar
-          address: x
+          address: 'x'
   users:
     deploy:
-      private_key:
-      address:
+      private_key: ''
+      address: ''
     alice:
-      private_key:
-      address:
+      private_key: ''
+      address: ''
     bob:
-      private_key:
-      address:
+      private_key: ''
+      address: ''
+
+  cita_cli_path: cita-cli
 
 development:
   <<: *default
