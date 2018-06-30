@@ -5,16 +5,16 @@ default: &default
       chain_id: 1
       ex_contract: x
       token_contracts:
-        Aurora:
-          icon: aurora
+        AAPO:
+          icon: aapo
           address: x
     Barney:
       rpc: http://127.0.0.1:1338
       chain_id: 1
       ex_contract: x
       token_contracts:
-        Bigfish:
-          icon: bigfish
+        ABAR:
+          icon: abar
           address: x
   users:
     deploy:
