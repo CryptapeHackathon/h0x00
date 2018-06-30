@@ -9,7 +9,7 @@ contract Owned {
 
     event OwnershipTransferred(address indexed _from, address indexed _to);
 
-    constructor() public {
+    function Owned() public {
         owner = msg.sender;
     }
 
@@ -23,7 +23,7 @@ contract Owned {
     }
     function acceptOwnership() public {
         require(msg.sender == newOwner);
-        emit OwnershipTransferred(owner, newOwner);
+        OwnershipTransferred(owner, newOwner);
         owner = newOwner;
         newOwner = address(0);
     }
@@ -120,7 +120,7 @@ contract Exchanger is Owned {
             orders[order.orderHash] = order;
             return 0;
         } else {
-            emit LogError(uint8(Errors.INSUFFICIENT_BALANCE_OR_ALLOWANCE), order.orderHash);
+            LogError(uint8(Errors.INSUFFICIENT_BALANCE_OR_ALLOWANCE), order.orderHash);
             return 1;
         }
     }
@@ -150,7 +150,7 @@ contract Exchanger is Owned {
             ERC20Interface(makerToken).approve(owner, 0);
             return 0;
         } else {
-            emit LogError(uint8(Errors.ORDER_FULLY_FILLED_OR_CANCELLED), order.orderHash);
+            LogError(uint8(Errors.ORDER_FULLY_FILLED_OR_CANCELLED), order.orderHash);
             return 1;
         }
     }
@@ -180,11 +180,11 @@ contract Exchanger is Owned {
             if (ERC20Interface(makerToken).transferFrom(maker, taker, fillAmount)) {
                 return 0;
             } else {
-                emit LogError(uint8(Errors.INSUFFICIENT_BALANCE_OR_ALLOWANCE), order.orderHash);
+                LogError(uint8(Errors.INSUFFICIENT_BALANCE_OR_ALLOWANCE), order.orderHash);
                 return 1;
             }
         } else {
-            emit LogError(uint8(Errors.ORDER_FULLY_FILLED_OR_CANCELLED), order.orderHash);
+            LogError(uint8(Errors.ORDER_FULLY_FILLED_OR_CANCELLED), order.orderHash);
             return 1;
         }
     }
@@ -233,15 +233,13 @@ contract Exchanger is Owned {
         returns (bytes32)
     {
         return keccak256(
-            abi.encodePacked(
-                address(this),
-                maker,
-                makerToken,
-                takerChain,
-                takerToken,
-                makerAmount,
-                takerAmount
-            )
+            address(this),
+            maker,
+            makerToken,
+            takerChain,
+            takerToken,
+            makerAmount,
+            takerAmount
         );
     }
 }
