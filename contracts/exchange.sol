@@ -9,7 +9,7 @@ contract Owned {
 
     event OwnershipTransferred(address indexed _from, address indexed _to);
 
-    constructor() public {
+    function Owned() public {
         owner = msg.sender;
     }
 
@@ -23,31 +23,9 @@ contract Owned {
     }
     function acceptOwnership() public {
         require(msg.sender == newOwner);
-        emit OwnershipTransferred(owner, newOwner);
+        OwnershipTransferred(owner, newOwner);
         owner = newOwner;
         newOwner = address(0);
-    }
-}
-
-// ----------------------------------------------------------------------------
-// Safe maths
-// ----------------------------------------------------------------------------
-library SafeMath {
-    function add(uint a, uint b) internal pure returns (uint c) {
-        c = a + b;
-        require(c >= a);
-    }
-    function sub(uint a, uint b) internal pure returns (uint c) {
-        require(b <= a);
-        c = a - b;
-    }
-    function mul(uint a, uint b) internal pure returns (uint c) {
-        c = a * b;
-        require(a == 0 || c / a == b);
-    }
-    function div(uint a, uint b) internal pure returns (uint c) {
-        require(b > 0);
-        c = a / b;
     }
 }
 
@@ -68,20 +46,8 @@ contract ERC20Interface {
 }
 
 contract Exchanger is Owned {
-    using SafeMath for uint;
-
-    mapping (bytes32 => uint) public filled;
-    mapping (bytes32 => uint) public cancelled;
-    mapping (bytes32 => Order) public orders;
-
-    // Error Codes
-    enum Errors {
-        ORDER_EXPIRED,                    // Order has already expired
-        ORDER_FULLY_FILLED_OR_CANCELLED,  // Order has already been fully filled or cancelled
-        INSUFFICIENT_BALANCE_OR_ALLOWANCE // Insufficient balance or allowance for token transfer
-    }
-
-    event LogError(uint8 indexed errorId, bytes32 indexed orderHash);
+    uint[] public deleted;
+    Order[] public orders;
 
     struct Order {
         // 发起人的地址
@@ -94,7 +60,6 @@ contract Exchanger is Owned {
         address takerToken;
         uint makerAmount;
         uint takerAmount;
-        bytes32 orderHash;
     }
 
     function createOrder(
@@ -102,124 +67,28 @@ contract Exchanger is Owned {
         string takerChain, 
         address takerToken, 
         uint makerAmount,
-        uint takerAmount) public returns (uint) {
+        uint takerAmount) public {
         Order memory order = Order({
             maker: msg.sender,
             makerToken: makerToken,
             takerChain: takerChain,
             takerToken: takerToken,
             makerAmount: makerAmount,
-            takerAmount: takerAmount,
-            orderHash: getOrderHash(msg.sender, makerToken, takerChain, takerToken, makerAmount, takerAmount)
+            takerAmount: takerAmount
         });
 
         if (ERC20Interface(order.maker).approve(owner, order.makerAmount)) {
-            orders[order.orderHash] = order;
-            return 0;
-        } else {
-            emit LogError(uint8(Errors.INSUFFICIENT_BALANCE_OR_ALLOWANCE), order.orderHash);
-            return 1;
+            orders.push(order);
         }
     }
 
-    function cancelOrder(
-        address makerToken, 
-        string takerChain, 
-        address takerToken, 
-        uint makerAmount,
-        uint takerAmount,
-        uint cancelTakerAmount) public returns (uint) {
-        Order memory order = Order({
-            maker: msg.sender,
-            makerToken: makerToken,
-            takerChain: takerChain,
-            takerToken: takerToken,
-            makerAmount: makerAmount,
-            takerAmount: takerAmount,
-            orderHash: getOrderHash(msg.sender, makerToken, takerChain, takerToken, makerAmount, takerAmount)
-        });
-
-        uint remainingAmount = order.takerAmount.sub(filled[order.orderHash].add(cancelled[order.orderHash]));
-        if (remainingAmount > 0) {
-            uint cancelledAmount = cancelTakerAmount > remainingAmount ? remainingAmount : cancelTakerAmount;
-            cancelled[order.orderHash] = cancelled[order.orderHash].add(cancelledAmount);
-            // revoke approval
-            ERC20Interface(order.maker).approve(owner, 0);
-            return 0;
-        } else {
-            emit LogError(uint8(Errors.ORDER_FULLY_FILLED_OR_CANCELLED), order.orderHash);
-            return 1;
-        }
+    function cancelOrder(uint orderId) public onlyOwner {
+        deleted.push(orderId);
     }
 
-    function fillOrder(
-        address maker,
-        address makerToken, 
-        string takerChain, 
-        address takerToken, 
-        uint makerAmount,
-        uint takerAmount,
-        address taker,
-        uint fillAmount) public returns (uint) {
-        Order memory order = Order({
-            maker: maker,
-            makerToken: makerToken,
-            takerChain: takerChain,
-            takerToken: takerToken,
-            makerAmount: makerAmount,
-            takerAmount: takerAmount,
-            orderHash: getOrderHash(maker, makerToken, takerChain, takerToken, makerAmount, takerAmount)
-        });
-
-        uint remainingAmount = order.takerAmount.sub(filled[order.orderHash].add(cancelled[order.orderHash]));
-        if (remainingAmount >= fillAmount) {
-            filled[order.orderHash] = filled[order.orderHash].add(fillAmount);
-            if (ERC20Interface(order.maker).transferFrom(maker, taker, fillAmount)) {
-                return 0;
-            } else {
-                emit LogError(uint8(Errors.INSUFFICIENT_BALANCE_OR_ALLOWANCE), order.orderHash);
-                return 1;
-            }
-        } else {
-            emit LogError(uint8(Errors.ORDER_FULLY_FILLED_OR_CANCELLED), order.orderHash);
-            return 1;
-        }
-    }
-
-    function getOrderFilled(bytes32 orderHash) public view returns (uint) {
-        return filled[orderHash];
-    }
-
-    function getOrderCancelled(bytes32 orderHash) public view returns (uint) {
-        return cancelled[orderHash];
-    }
-
-    function getOrder(bytes32 orderHash) public view returns(address, address, string, address, uint, uint) {
-        Order memory order = orders[orderHash];
-        return (order.maker, order.makerToken, order.takerChain, order.takerToken, order.makerAmount, order.takerAmount);
-    }
-
-    function getOrderHash(
-        address maker,
-        address makerToken, 
-        string takerChain, 
-        address takerToken, 
-        uint makerAmount,
-        uint takerAmount)
-        public
-        view
-        returns (bytes32)
-    {
-        return keccak256(
-            address(this),
-            maker,
-            makerToken,
-            takerChain,
-            takerToken,
-            makerAmount,
-            takerAmount
-        );
+    function fillOrder(uint orderId, address taker) public onlyOwner {
+        Order storage order = orders[orderId];
+        deleted.push(orderId);
+        ERC20Interface(order.maker).transferFrom(order.maker, taker, order.makerAmount);
     }
 }
-
-
