@@ -77,7 +77,7 @@ namespace :ex do
     appo = apollo['token_contracts']['AAPO']['address'][2..-1]
     barney = c['chains']['Barney']
     abar = barney['token_contracts']['ABAR']['address'][2..-1]
-    deploy_key = c['users']['alice']['private_key']
+    deploy_key = c['users']['deploy']['private_key']
     alice_addr = c['users']['alice']['address'][2..-1]
     bob_addr = c['users']['bob']['address'][2..-1]
 
